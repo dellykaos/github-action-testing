@@ -23,3 +23,8 @@ func TestName(t *testing.T) {
 	assert.Equal("Hello, darren!", hello.Name("darren"))
 	assert.Equal("Hello, world!", hello.Name(""))
 }
+
+func TestError(t *testing.T) {
+	assert := assert.New(t)
+	assert.Equal("raise error", hello.NoMethodError())
+}
