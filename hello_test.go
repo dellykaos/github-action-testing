@@ -1,21 +1,11 @@
 package hello_test
 
-import "testing"
+import (
+	"testing"
 
-import hello "github.com/dellykaos/github-action-testing"
-
-import "github.com/stretchr/testify/assert"
-
-func TestAdd(t *testing.T) {
-	assert := assert.New(t)
-	t.Run("Add with positive numbers", func(t *testing.T) {
-		assert.Equal(20, hello.Add(10, 10))
-	})
-
-	t.Run("Add with negative numbers", func(t *testing.T) {
-		assert.Equal(0, hello.Add(10, -10))
-	})
-}
+	hello "github.com/dellykaos/github-action-testing"
+	"github.com/stretchr/testify/assert"
+)
 
 func TestName(t *testing.T) {
 	assert := assert.New(t)
