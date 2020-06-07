@@ -4,7 +4,7 @@ metadata:
   annotations:
     release: '{{.variable.VERSION}}'
   name: {{.config.projectName}}-{{.service.name}}-{{.environment.name}}
-  namespace: {{.variable.VAR_KUBE_NAMESPACE}}
+  namespace: {{.config.projectName}}
 spec:
   selector:
     matchLabels:

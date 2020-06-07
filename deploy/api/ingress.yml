@@ -1,20 +1,17 @@
-apiVersion: networking.k8s.io/v1beta1
+
+apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{.config.projectName}}-{{.service.name}}-{{.environment.name}}-ingress
   namespace: {{.config.projectName}}
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
-  labels:
-    project: {{.config.projectName}}
-    service: {{.service.name}}
-    env: {{.environment.name}}
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: {{.config.projectName}}-{{.service.name}}.local.host
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: {{.config.projectName}}-{{.service.name}}-{{.environment.name}}
-          servicePort: {{.service.port}}
+    - host: {{.service.name}}-{{.config.projectName}}.local
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{.config.projectName}}-{{.service.name}}-{{.environment.name}}
+              servicePort: {{.service.port}}

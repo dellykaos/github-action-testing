@@ -6,7 +6,7 @@ metadata:
     service: {{.service.name}}
     env: {{.environment.name}}
   name: {{.config.projectName}}-{{.service.name}}-{{.environment.name}}
-  namespace: {{.variable.VAR_KUBE_NAMESPACE}}
+  namespace: {{.config.projectName}}
 spec:
   selector:
     project: {{.config.projectName}}
