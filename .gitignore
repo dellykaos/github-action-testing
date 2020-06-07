@@ -1,3 +1,5 @@
-.vsscode
+.vscode
 
 deploy/_output
+
+coverage.out
