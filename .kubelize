@@ -1,0 +1,23 @@
+templateVersion: v2.2.3
+projectName: latihan
+services:
+- name: api
+  port: "3200"
+  environments:
+  - name: development
+    replica: "1"
+  healthz: healthz
+  minCpu: "0.3"
+  maxCpu: "1"
+  minMem: "0.5"
+  maxMem: "1"
+  minReady: 60
+  terminationGracePeriod: 70
+  preStopSleep: 60
+  averageUtilization: 35
+  rollingUpdate:
+    maxUnavailable: 10%
+    maxSurge: 25%
+  healthCheck:
+    delay: "30"
+    timeout: "1"
