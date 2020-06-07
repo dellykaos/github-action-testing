@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    release: '{{.variable.VERSION}}'
+  name: {{.config.projectName}}-{{.service.name}}-{{.environment.name}}
+  namespace: {{.variable.VAR_KUBE_NAMESPACE}}
+spec:
+  selector:
+    matchLabels:
+      project: {{.config.projectName}}
+      service: {{.service.name}}
+      env: {{.environment.name}}
+  replicas: {{.environment.replica}}
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      annotations:
+        release: '{{.variable.VERSION}}'
+      labels:
+        project: {{.config.projectName}}
+        service: {{.service.name}}
+        env: {{.environment.name}}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: env
+                operator: In
+                values:
+                - {{.environment.name}}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  project: {{.config.projectName}}
+                  service: {{.service.name}}
+          - weight: 10
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  project: {{.config.projectName}}
+      containers:
+      - name: {{.config.projectName}}-{{.service.name}}
+        image: {{.variable.IMAGE}}:{{.variable.VERSION}}
+        livenessProbe:
+          httpGet:
+            path: /{{.service.healthz}}
+            port: {{.service.port}}
+          initialDelaySeconds: {{.service.healthCheck.delay}}
+          timeoutSeconds: {{.service.healthCheck.timeout}}
+        readinessProbe:
+          httpGet:
+            path: /{{.service.healthz}}
+            port: {{.service.port}}
+          initialDelaySeconds: {{.service.healthCheck.delay}}
+          timeoutSeconds: {{.service.healthCheck.timeout}}
+        ports:
+        - containerPort: {{.service.port}}
+        resources:
+          limits:
+            memory: {{.service.maxMem}}Gi
+            cpu: {{.service.maxCpu}}
+          requests:
+            memory: {{.service.minMem}}Gi
+            cpu: {{.service.minCpu}}
