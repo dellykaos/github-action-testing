@@ -26,7 +26,8 @@ build:
 	docker build -t $(IMAGE):$(VERSION) -f ./deploy/api/Dockerfile . --build-arg VERSION=${VERSION}
 
 push:
-	docker push $(IMAGE):$(VERSION)
+	docker push $(IMAGE):$(VERSION) && \
+	docker rmi $(IMAGE):$(VERSION)
 
 kubefile:
 	$(foreach f, $(shell ls deploy/api/*.yml), \
@@ -37,4 +38,4 @@ apply:
 	kubectl apply -f $(ODIR)/api/service.yml --context=$(CONTEXT) && \
 	kubectl apply -f $(ODIR)/api/deployment.yml --context=$(CONTEXT)
 
-deploy: dep compile build kubefile apply
+deploy: dep compile build push kubefile apply
