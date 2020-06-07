@@ -16,6 +16,7 @@ func main() {
 	h := handler.New()
 
 	router.GET("/healthz", healthz.Healthz)
+	router.GET("/", h.Hello)
 	router.GET("/hello", h.Hello)
 	router.GET("/hello/:name", h.Hello)
 

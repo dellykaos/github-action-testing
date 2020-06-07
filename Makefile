@@ -35,7 +35,7 @@ kubefile:
 
 apply:
 	echo deploying "api" to environment "$(ENV)" && \
-	kubectl apply -f $(ODIR)/api/service.yml --context=$(CONTEXT) && \
-	kubectl apply -f $(ODIR)/api/deployment.yml --context=$(CONTEXT)
+	$(foreach f, $(shell ls $(ODIR)/api/*.yml), \
+		kubectl apply -f $(f) --context=$(CONTEXT);)
 
 deploy: dep compile build push kubefile apply
